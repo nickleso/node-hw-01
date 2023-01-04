@@ -8,12 +8,11 @@ async function listContacts() {
     const contacts = await fs.readFile(contactsPath, "utf-8");
 
     const parsedContacts = JSON.parse(contacts);
-    console.log(parsedContacts);
+    console.table(parsedContacts);
   } catch (error) {
     console.log(error);
   }
 }
-// listContacts();
 
 async function getContactById(contactId) {
   try {
@@ -30,7 +29,6 @@ async function getContactById(contactId) {
     console.log(error);
   }
 }
-// getContactById(2);
 
 async function removeContact(contactId) {
   try {
@@ -53,32 +51,28 @@ async function removeContact(contactId) {
     console.log(error);
   }
 }
-// removeContact(4);
 
-async function addContact(name, email, phone) {
+async function addContact(id, name, email, phone) {
   try {
     const contacts = await fs.readFile(contactsPath, "utf-8");
-
-    const parsedContacts = JSON.parse(contacts);
+    let parsedContacts = JSON.parse(contacts);
     console.log(parsedContacts);
-    console.log(parsedContacts.length);
 
     const newContact = {
-      id: "12",
-      name: name,
-      email: email,
-      phone: phone,
+      id: id.toString(),
+      name: name.toString(),
+      email: email.toString(),
+      phone: phone.toString(),
     };
-
     console.log(newContact);
-    const newListContacts = await parsedContacts.push("helo");
 
-    console.log(newListContacts);
+    parsedContacts.push(newContact);
+    console.log(parsedContacts);
 
-    // await fs.writeFile(contactsPath, JSON.stringify(newListContacts), "utf-8");
+    await fs.writeFile(contactsPath, JSON.stringify(parsedContacts), "utf-8");
   } catch (error) {
     console.log(error);
   }
 }
 
-// addContact("Bon", "123@mail.com", "131315");
+module.exports = { listContacts, getContactById, removeContact, addContact };
