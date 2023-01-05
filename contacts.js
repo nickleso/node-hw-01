@@ -52,14 +52,14 @@ async function removeContact(contactId) {
   }
 }
 
-async function addContact(id, name, email, phone) {
+async function addContact(name, email, phone) {
   try {
     const contacts = await fs.readFile(contactsPath, "utf-8");
     let parsedContacts = JSON.parse(contacts);
     console.log(parsedContacts);
 
     const newContact = {
-      id: id.toString(),
+      id: uid(4),
       name: name.toString(),
       email: email.toString(),
       phone: phone.toString(),
@@ -73,6 +73,24 @@ async function addContact(id, name, email, phone) {
   } catch (error) {
     console.log(error);
   }
+}
+
+var IDX = 256,
+  HEX = [],
+  SIZE = 256,
+  BUFFER;
+while (IDX--) HEX[IDX] = (IDX + 256).toString(16).substring(1);
+
+function uid(len) {
+  var i = 0,
+    tmp = len || 11;
+  if (!BUFFER || IDX + tmp > SIZE * 2) {
+    for (BUFFER = "", IDX = 0; i < SIZE; i++) {
+      BUFFER += HEX[(Math.random() * 256) | 0];
+    }
+  }
+
+  return BUFFER.substring(IDX, IDX++ + tmp);
 }
 
 module.exports = { listContacts, getContactById, removeContact, addContact };
